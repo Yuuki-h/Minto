@@ -2,84 +2,170 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-	<head>
-		<title>マイページ</title>
-	<!-- jqGrid 表示ここから -->
+
+<head>
+
+<!-- <meta charset="UTF-8" /> -->
+
+<title>Dialogウィジェット</title>
+
 		<link type="text/css" media="screen" href="jquery-ui-1.11.4.custom/jquery-ui.min.css" rel="stylesheet" />
 		<link type="text/css" media="screen" href="Guriddo_jqGrid_JS_5.1.1/css/ui.jqgrid.css" rel="stylesheet" />
 		<script type="text/javascript" src="Guriddo_jqGrid_JS_5.1.1/js/jquery-1.11.0.min.js" ></script>
 		<script type="text/javascript" src="Guriddo_jqGrid_JS_5.1.1/js/jquery.jqGrid.min.js" ></script>
 		<script type="text/javascript" src="Guriddo_jqGrid_JS_5.1.1/js/i18n/grid.locale-ja.js" ></script>
 
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<style type="text/css">
+		<script type="text/javascript" src="jquery-ui-1.11.4.custom/jquery-ui.min.js" ></script>
 
-		#content{
-		padding:10px;
+		<style>
+		div{
+		border: solid 1px black;
 		}
 
-		#dialog_back{
-		position: absolute;
-		top:0px;
-		left:0px;
-		width:100%;
-		background-coror: #000;
-		opacity: 0.5;
+		outer{
+		width:500px;
 		}
 
-		#dialog_body{
-		position:absolute;
-		border-radius: 6px 6px 6px 6px;
-		left:75px;
-		top:150px;
+		u-flex{
+		display: flex;
+		}
+
+		line_1{
+		height:30px;
+		line-height: 30px;
+		width:100px;
+		float:right;
+		padding:5px;
+		}
+
+		row1{
+		height: 30px;
+		line-height: 30px
+		}
+
+		size{
 		width:200px;
-		height:150;
-		background-color: #FFF;
-		box-shadow: 6px 6px 6px rgba(0,0,0.4);
-		padding:50px;
 		}
 		</style>
 
-			<script type="text/javascript">
-			function showDialog(){
-				//ダイアログ表示
-				var html = document.getElementById("content").innerHTML;
 
-				html = html + '<div id="dialog">'
-							+ '<div id="dialog_back" style="height:'
-							+ getBrowserHeight() + 'px;"></div>'
-							+ '<div id="dialog_body">'
-							+ '<input type="button" onclick="closeDialog()"value="閉じる">'
-							+'</div>'
-							+'</div>';
-				document.getElementById("content").innerHTML = html;
-			}
+	<script type="text/javascript">
+	function t_code(){
 
-			function getBrowserHeight(){
-				//画面の高さを取得
-				if(window.innerHeight){
-					return window.innerHeight;
-				}
-				else if (document.documentElement && document.documentElement.clientHeight != 0){
-					return documentElement.clientHeight;
-				}
-				else if( document.body){
-					return document.body.clientHeight;
-				}
-				return 0;
-			}
 
-			function closeDialog(){
-				//ダイアログを閉じる
-				var delNode = document.getElementById("dialog");
-				delNode.parentNode.removeChild(delNode);
+	}
+
+	$(function(){
+		$('#button1').click(function(){
+		  $('#dialogdemo1').dialog('open');
+		});
+	});
+
+	$(function(){
+		$('#dialogdemo1').dialog({
+		autoOpen: false,
+		title: 'jQuery Dialog Demo',
+		closeOnEscape: false,
+		modal: true,
+		width: 600,
+		height: 500,
+		});
+	});
+
+	$(function(){
+		$("input[type=submit],button")
+		.button()
+		.click(function(event){
+			event.preventDefault();
+		});
+		//チェックアイコンを左に
+		$('button.left_1').button({
+			icons:{
+				primary: 'ui-icon-check'
 			}
+		});
+		//クローズアイコンを左に
+		$('button.left_2').button({
+			icons:{
+				primary: 'ui-icon-close'
+			}
+		});
+
+	});
+
 </script>
+
 </head>
 
 <body>
-<div id= "content">
-<input type="button" value="テスト" onclick = "showDialog();">
+	<div id="dialogdemo1">
+<!-- ************:一行目 -->
+		<div class= "outor">
+			<div class="u-flex">
+				<span class="size">
+				 	登録日時：<input type="text">　
+				 </span>
+				 <span class="line_1 ">
+					<button type="submit" class="left_1">OK</button>
+					<button type="submit" class="left_2">Cancel</button>
+				</span>
+			</div>
+<!-- ******************** -->
+		<div style="border-style: none; line-height:60px">
+<!-- ************:二行目 -->
+			<span style="border-style: none;">
+				ＩＤ：<input type="text" ID="num_ID" >
+			</span>
+			<span style="border-style: none; font-size: 10px; vertical-align:suoer;">
+				ああああああ
+			</span>
+			<span style="border-style: none; font-size: 10px; vertical-align:sub;">
+				ああああああ
+			</span>
+<!-- ******************** -->
+		</div>
+		<div style="border-style: none; line-height:50px">
+<!-- ************:三行目 -->
+				<div>
+					<span style="border-style: none; display:inline-block">
+						ユーザー名：<input type="text" size="15">　　　　
+					</span>
+					<span>
+						<input type="text"  size="15">
+					</span>
+				</div>
+<!-- ******************** -->
+			<div style="border-style: none; line-height:50px">
+<!-- ************:四行目 -->
+				<div>
+					<span style="border-style: none; display:inline-block">
+						パスワード：<input type="text" size="15">　　　　
+					</span>
+					<span>
+						<input type="text"  size="15">
+					</span>
+				</div>
+<!-- ******************** -->
+				<div style="border-style: none; line-height:50px">
+<!-- ************:五行目 -->
+					<div>
+						<span style="border-style: none; display:inline-block">
+							表　示　名：<input type="text" size="15">　　　　
+						</span>
+						<span>
+							<input type="text"  size="15">
+						</span>
+					</div>
+<!-- ******************** -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<button id="button">ファイルを開く</button>
 </div>
+
+<button id="button">ダイアログを開く</button>
+
 </body>
+
 </html>
