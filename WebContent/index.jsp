@@ -121,6 +121,7 @@
 							var row = grid.getRowData(id);
 							row_id = row.grid_id;
 							row_del = id;
+							document.getElementById("id_select").value = row_del;
 							document.getElementById("id_user_add").value = row.grid_name;
 							document.getElementById("id_pass_add").value =row.grid_pass;
 							document.getElementById("id_disp_add").value = row.grid_disp;
@@ -147,9 +148,9 @@
 			//＊＊＊＊＊＊＊＊＊
 			function SaveCookie()//クッキー保存
 			{
-				document.cookie = 'ck_user_add=' + escape(document.getElementById("id_user_add").value);
-				document.cookie = 'ck_pass_add=' + escape(document.getElementById("id_pass_add").value);
-				document.cookie = 'ck_disp_add=' + escape(document.getElementById("id_disp_add").value);
+				document.cookie = 'ck_user_add=' + escape(document.getElementById("dia_name_add").value);
+				document.cookie = 'ck_pass_add=' + escape(document.getElementById("dia_pass_add").value);
+				document.cookie = 'ck_disp_add=' + escape(document.getElementById("dia_disp_add").value);
 				document.cookie = 'ck_select=' + escape(document.getElementById("id_select").value);
 				document.cookie = 'ck_delete=' + escape(document.getElementById("id_delete").value);
 			}
@@ -209,16 +210,19 @@
 			//＊＊＊＊＊＊＊＊＊
 			function AddButton()//追加ボタン押したとき
 			{
-				var user = document.getElementById("id_user_add").value;
-				var pass = document.getElementById("id_pass_add").value;
-				var disp = document.getElementById("id_disp_add").value;
+				var user = document.getElementById("dia_name_add").value;
+				var pass = document.getElementById("dia_pass_add").value;
+				var disp = document.getElementById("dia_disp_add").value;
 				var target = document.getElementById("error");
+
+				console.log([user, pass, disp, target]);
 
 				if(user != 0 && pass != 0 && disp != 0)
 				{
+					console.log('post insert');
 					SaveCookie();//クッキー保存
-					document.getElementById("formid").action = "Insert.jsp";
-					document.formname.submit();
+					document.getElementById("addform").action = "insert";
+					document.addform.submit();
 					target.innerHTML = "追加しました";
 				}
 				else if(user == 0)
@@ -254,8 +258,8 @@
 					document.getElementById("id_select").value = row_id;
 					document.getElementById("id_delete").value = row_del;
 					SaveCookie();//クッキー保存
-					document.getElementById("formid").action = "Update.jsp";
-					document.formname.submit();
+					document.getElementById("changeform").action = "update";
+					document.changeform.submit();
 					target.innerHTML = "変更しました";
 				}
 				else
@@ -277,7 +281,7 @@
 						document.getElementById("id_select").value = row_id;
 						document.getElementById("id_delete").value = row_del;
 						SaveCookie();//クッキー保存
-						document.getElementById("formid").action = "Delete.jsp";
+						document.getElementById("formid").action = "delete";
 						document.formname.submit();
 						target.innerHTML = "削除しました";
 					}
@@ -297,24 +301,28 @@
 	$(function(){
 		$('#button_add').click(function(){
 	  		$('#dialog_add').dialog('open');
+			var id = document.getElementById("id_select").value;
 			var user = document.getElementById("id_user_add").value;
 			var pass = document.getElementById("id_pass_add").value;
 			var disp = document.getElementById("id_disp_add").value;
 
+			document.getElementById("dia_id_1").value = id;
 			document.getElementById("dia_name_add").value = user;
 			document.getElementById("dia_pass_add").value = pass;
 			document.getElementById("dia_disp_add").value = disp;
 		});
 
-		$('#button_chenge').click(function(){
-	  		$('#dialog_chenge').dialog('open');
+		$('#button_change').click(function(){
+	  		$('#dialog_change').dialog('open');
+			var id = document.getElementById("id_select").value;
 			var user = document.getElementById("id_user_add").value;
 			var pass = document.getElementById("id_pass_add").value;
 			var disp = document.getElementById("id_disp_add").value;
 
-			document.getElementById("dia_name_chenge").value = user;
-			document.getElementById("dia_pass_chenge").value = pass;
-			document.getElementById("dia_disp_chenge").value = disp;
+			document.getElementById("dia_id_2").value = id;
+			document.getElementById("dia_name_change").value = user;
+			document.getElementById("dia_pass_change").value = pass;
+			document.getElementById("dia_disp_change").value = disp;
 		});
 	});
 
@@ -328,9 +336,9 @@
 		height: 500,
 		});
 
-		$('#dialog_chenge').dialog({
+		$('#dialog_change').dialog({
 		autoOpen: false,
-		title: 'Dialog chenge',
+		title: 'Dialog change',
 		closeOnEscape: false,
 		modal: true,
 		width: 600,
@@ -357,181 +365,184 @@
 			}
 		});
 	});
+	</script>
+	</head>
 
-</script>
-</head>
+	<body onLoad="BakeCookie();" bgcolor="#FFFFFF">
+		<form method="POST" name="formname" id="formid" action="login.jsp">
+			<table style="border-style: none;" border="1" >
+				<tr>
+					<td  style="border-style: none;"><input type="button" value="ログアウト" name="a" onclick = "LogoutButton();"></td>
+					<td style="border-style: none;">ログインしました</td>
+				</tr>
+			</table>
+			<table style="border-style: none; width:100%;" border="1">
+				<tr>
+					<td  style="border-style: none;" width="50"><hr color="#696969" size="2" style="border-top: 1px solid #bbb;"></td>
+					<td  style="border-style: none;color:#0000FF" width="140" align="center">ユーザマスタ編集</td>
+					<td  style="border-style: none;"><hr color="#696969" size="2" style="border-top: 1px solid #bbb;"></td>
+				</tr>
+			</table>
+			<table style="border-style: none;" border="1" >
+				<tr>
+					<td  style="border-style: none;"><input type="button" value="追加" id="button_add"></td>
+					<td  style="border-style: none;"><input type="button" value="変更" id="button_change"></td>
+					<td  style="border-style: none;"><input type="button" value="削除" name="delete" onclick = "DeleteButton();"></td>
+					<td  style="border-style: none;"><p id="error"></p></td>
+				</tr>
+			</table>
+			<table style="border-style: none;" border="1" >
+				<tr>
+					<td style="border-style: none;"align="center">ユーザー名</td>
+					<td style="border-style: none;"align="center">パスワード</td>
+					<td style="border-style: none;"align="center">表示名</td>
+				</tr>
+				<tr>
+					<td style="border-style: none;"><input id="id_user_add" type="text" name="name_user_add" style="width: 150px; height: 24px; color:#000000;" ></td>
+					<td style="border-style: none;"><input id="id_pass_add" type="text" name="name_pass_add" style="width: 150px; height: 24px; color:#000000;"></td>
+					<td style="border-style: none;"><input id="id_disp_add" type="text" name="name_disp_add" style="width: 150px; height: 24px; color:#000000;"></td>
+					<td style="border-style: none;"><input id="id_select" type="text" name="name_select" style="width: 150px; height: 24px; color:#000000;"></td>
+					<td style="border-style: none;"><input id="id_delete" type="text" name="name_delete" style="width: 150px; height: 24px; color:#000000;"></td>
+				</tr>
+			</table>
+			<table id="list">
+			</table>
+		</form>
 
-<body onLoad="BakeCookie();" bgcolor="#FFFFFF">
-	<form method="POST" name="formname" id="formid" action="login.jsp">
-		<table style="border-style: none;" border="1" >
-			<tr>
-				<td  style="border-style: none;"><input type="button" value="ログアウト" name="a" onclick = "LogoutButton();"></td>
-				<td style="border-style: none;">ログインしました</td>
-			</tr>
-		</table>
-		<table style="border-style: none; width:100%;" border="1">
-			<tr>
-				<td  style="border-style: none;" width="50"><hr color="#696969" size="2" style="border-top: 1px solid #bbb;"></td>
-				<td  style="border-style: none;color:#0000FF" width="140" align="center">ユーザマスタ編集</td>
-				<td  style="border-style: none;"><hr color="#696969" size="2" style="border-top: 1px solid #bbb;"></td>
-			</tr>
-		</table>
-		<table style="border-style: none;" border="1" >
-			<tr>
-				<td  style="border-style: none;"><input type="button" value="追加" id="button_add"></td>
-				<td  style="border-style: none;"><input type="button" value="変更" id="button_chenge"></td>
-				<td  style="border-style: none;"><input type="button" value="削除" name="delete" onclick = "DeleteButton();"></td>
-				<td  style="border-style: none;"><p id="error"></p></td>
-			</tr>
-		</table>
-		<table style="border-style: none;" border="1" >
-			<tr>
-				<td style="border-style: none;"align="center">ユーザー名</td>
-				<td style="border-style: none;"align="center">パスワード</td>
-				<td style="border-style: none;"align="center">表示名</td>
-			</tr>
-			<tr>
-				<td style="border-style: none;"><input id="id_user_add" type="text" name="name_user_add" style="width: 150px; height: 24px; color:#000000;" ></td>
-				<td style="border-style: none;"><input id="id_pass_add" type="text" name="name_pass_add" style="width: 150px; height: 24px; color:#000000;"></td>
-				<td style="border-style: none;"><input id="id_disp_add" type="text" name="name_disp_add" style="width: 150px; height: 24px; color:#000000;"></td>
-				<td style="border-style: none;"><input id="id_select" type="hidden" name="name_select" style="width: 150px; height: 24px; color:#000000;"></td>
-				<td style="border-style: none;"><input id="id_delete" type="hidden" name="name_delete" style="width: 150px; height: 24px; color:#000000;"></td>
-			</tr>
-		</table>
-		<table id="list">
-		</table>
-	</form>
+		<div id="dialog_add">
+			<form method="POST" name="addform" id="addform" action="insert">
+			<!-- ************:一行目 -->
+				<div class= "outor">
+					<div class="u-flex">
+						<span class="size">
+						 	登録日時：<input type="text">　
+						 </span>
+						 <span class="line_1 ">
+							<button type="submit" class="OK_button" onclick="AddButton()">OK</button>
+							<button type="submit" class="Cancel_button" onclick="$('#dialog_add').dialog('close');">Cancel</button>
+						</span>
+					</div>
+			<!-- ******************** -->
+					<div style="border-style: none; line-height:60px">
+			<!-- ************:二行目 -->
+						<span style="border-style: none;">
+							ＩＤ：<input type="text" id="dia_id_1"  name="dia_id_1">
+						</span>
+						<span style="border-style: none; font-size: 10px; vertical-align:suoer;">
+							ああああああ
+						</span>
+						<span style="border-style: none; font-size: 10px; vertical-align:sub;">
+							ああああああ
+						</span>
+			<!-- ******************** -->
+					</div>
+					<div style="border-style: none; line-height:50px">
+			<!-- ************:三行目 -->
+						<div>
+							<span style="border-style: none; display:inline-block">
+								ユーザー名：<input id="dia_name_add" type="text" name="dia_name_add"  size="15">　　　　
+							</span>
+							<span>
+								<input type="text"  size="15">
+							</span>
+						</div>
+			<!-- ******************** -->
+						<div style="border-style: none; line-height:50px">
+			<!-- ************:四行目 -->
+							<div>
+								<span style="border-style: none; display:inline-block">
+									パスワード：<input id="dia_pass_add" type="text" name="dia_pass_add"size="15">　　　　
+								</span>
+								<span>
+									<input type="text"  size="15">
+								</span>
+							</div>
+			<!-- ******************** -->
+							<div style="border-style: none; line-height:50px">
+			<!-- ************:五行目 -->
+								<div>
+									<span style="border-style: none; display:inline-block">
+										表　示　名：<input id="dia_disp_add" type="text" name="dia_disp_add" size="15">　　　　
+									</span>
+									<span>
+										<input type="text"  size="15">
+									</span>
+								</div>
+			<!-- ******************** -->
+							</div>
+						</div>
+					</div>
+				</div>
+				<button id="button1">ファイルを開く</button>
+			</form>
+		</div>
 
-<div id="dialog_add">
-<!-- ************:一行目 -->
-	<div class= "outor">
-		<div class="u-flex">
-			<span class="size">
-			 	登録日時：<input type="text">　
-			 </span>
-			 <span class="line_1 ">
-				<button type="submit" class="OK_button" onclick="AddButton()">OK</button>
-				<button type="submit" class="Cancel_button" onclick="$('#dialog_add').dialog('close');">Cancel</button>
-			</span>
-		</div>
-<!-- ******************** -->
-	<div style="border-style: none; line-height:60px">
-<!-- ************:二行目 -->
-		<span style="border-style: none;">
-			ＩＤ：<input type="text" id="dia_id"  name="dia_id">
-		</span>
-		<span style="border-style: none; font-size: 10px; vertical-align:suoer;">
-			ああああああ
-		</span>
-		<span style="border-style: none; font-size: 10px; vertical-align:sub;">
-			ああああああ
-		</span>
-<!-- ******************** -->
-	</div>
-	<div style="border-style: none; line-height:50px">
-<!-- ************:三行目 -->
-			<div>
-				<span style="border-style: none; display:inline-block">
-					ユーザー名：<input id="dia_name_add" type="text" name="dia_name_add"  size="15">　　　　
-				</span>
-				<span>
-					<input type="text"  size="15">
-				</span>
-			</div>
-<!-- ******************** -->
-		<div style="border-style: none; line-height:50px">
-<!-- ************:四行目 -->
-			<div>
-				<span style="border-style: none; display:inline-block">
-					パスワード：<input id="dia_pass_add" type="text" name="dia_pass_add"size="15">　　　　
-				</span>
-				<span>
-					<input type="text"  size="15">
-				</span>
-			</div>
-<!-- ******************** -->
-			<div style="border-style: none; line-height:50px">
-<!-- ************:五行目 -->
-				<div>
-					<span style="border-style: none; display:inline-block">
-						表　示　名：<input id="dia_disp_add" type="text" name="dia_disp_add" size="15">　　　　
+		<div id="dialog_change">
+			<form method="POST" name="changeform" id="changeform" action="update">
+			<!-- ************:一行目 -->
+				<div class= "outor">
+					<div class="u-flex">
+						<span class="size">
+							登録日時：<input type="text">　
+						 </span>
+						 <span class="line_1 ">
+							<button type="submit" class="OK_button" onclick="ChangeButton()">OK</button>
+							<button type="submit" class="Cancel_button" onclick="$('#dialog_change').dialog('close');">Cancel</button>
+						</span>
+					</div>
+			<!-- ******************** -->
+				<div style="border-style: none; line-height:60px">
+			<!-- ************:二行目 -->
+					<span style="border-style: none;">
+						ＩＤ：<input type="text" id="dia_id_2"  name="dia_id_2">
 					</span>
-					<span>
-						<input type="text"  size="15">
+					<span style="border-style: none; font-size: 10px; vertical-align:suoer;">
+						ああああああ
 					</span>
-				</div>
-<!-- ******************** -->
-				</div>
-			</div>
-		</div>
-	</div>
-	<button id="button1">ファイルを開く</button>
-</div>
-
-<div id="dialog_chenge">
-<!-- ************:一行目 -->
-	<div class= "outor">
-		<div class="u-flex">
-			<span class="size">
-			 	登録日時：<input type="text">　
-			 </span>
-			 <span class="line_1 ">
-				<button type="submit" class="OK_button" onclick="ChangeButton()">OK</button>
-				<button type="submit" class="Cancel_button" onclick="$('#dialog_chenge').dialog('close');">Cancel</button>
-			</span>
-		</div>
-<!-- ******************** -->
-	<div style="border-style: none; line-height:60px">
-<!-- ************:二行目 -->
-		<span style="border-style: none;">
-			ＩＤ：<input type="text" id="dia_id"  name="dia_id">
-		</span>
-		<span style="border-style: none; font-size: 10px; vertical-align:suoer;">
-			ああああああ
-		</span>
-		<span style="border-style: none; font-size: 10px; vertical-align:sub;">
-			ああああああ
-		</span>
-<!-- ******************** -->
-	</div>
-	<div style="border-style: none; line-height:50px">
-<!-- ************:三行目 -->
-			<div>
-				<span style="border-style: none; display:inline-block">
-					ユーザー名：<input id="dia_name_chenge" type="text" name="dia_name_chenge"  size="15">　　　　
-				</span>
-				<span>
-					<input type="text"  size="15">
-				</span>
-			</div>
-<!-- ******************** -->
-		<div style="border-style: none; line-height:50px">
-<!-- ************:四行目 -->
-			<div>
-				<span style="border-style: none; display:inline-block">
-					パスワード：<input id="dia_pass_chenge" type="text" name="dia_pass_chenge"size="15">　　　　
-				</span>
-				<span>
-					<input type="text"  size="15">
-				</span>
-			</div>
-<!-- ******************** -->
-			<div style="border-style: none; line-height:50px">
-<!-- ************:五行目 -->
-				<div>
-					<span style="border-style: none; display:inline-block">
-						表　示　名：<input id="dia_disp_chenge" type="text" name="dia_disp_chenge" size="15">　　　　
+					<span style="border-style: none; font-size: 10px; vertical-align:sub;">
+						ああああああ
 					</span>
-					<span>
-						<input type="text"  size="15">
-					</span>
+			<!-- ******************** -->
 				</div>
-<!-- ******************** -->
+				<div style="border-style: none; line-height:50px">
+			<!-- ************:三行目 -->
+					<div>
+						<span style="border-style: none; display:inline-block">
+							ユーザー名：<input id="dia_name_change" type="text" name="dia_name_change"  size="15">　　　　
+						</span>
+						<span>
+							<input type="text"  size="15">
+						</span>
+					</div>
+			<!-- ******************** -->
+					<div style="border-style: none; line-height:50px">
+			<!-- ************:四行目 -->
+						<div>
+							<span style="border-style: none; display:inline-block">
+								パスワード：<input id="dia_pass_change" type="text" name="dia_pass_change" size="15">　　　　
+							</span>
+							<span>
+								<input type="text"  size="15">
+							</span>
+						</div>
+			<!-- ******************** -->
+						<div style="border-style: none; line-height:50px">
+			<!-- ************:五行目 -->
+							<div>
+								<span style="border-style: none; display:inline-block">
+ 									表　示　名：<input id="dia_disp_change" type="text" name="dia_disp_change" size="15">　　　　
+								</span>
+								<span>
+									<input type="text"  size="15">
+								</span>
+							</div>--%>
+			<!-- ******************** -->
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
+			<button id="button1">ファイルを開く</button>
+			</form>
 		</div>
-	</div>
-	<button id="button1">ファイルを開く</button>
-</div>
-</body>
+	</body>
 </html>

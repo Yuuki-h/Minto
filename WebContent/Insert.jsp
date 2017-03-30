@@ -25,9 +25,9 @@
 			// データベースへのアクセス
 			db.open();
 			request.setCharacterEncoding("UTF-8");
-			String db_name_ins = request.getParameter("name_user_add");
-			String db_pass_ins = request.getParameter("name_pass_add");
-			String db_disp_ins = request.getParameter("name_disp_add");
+			String db_name_ins = request.getParameter("dia_name_add");
+			String db_pass_ins = request.getParameter("dia_pass_add");
+			String db_disp_ins = request.getParameter("dia_disp_add");
 			if(db_name_ins != null && db_pass_ins != null && db_disp_ins != null)
 			{
 				String mySql = "insert into t_user_list(user_name,user_pass, disp_name) values('"+db_name_ins+"','"+db_pass_ins+"','"+db_disp_ins+"')";
